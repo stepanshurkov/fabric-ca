@@ -6,14 +6,15 @@
 ARG GO_VER
 ARG ALPINE_VER
 
-FROM golang:${GO_VER}-alpine as builder
+FROM --platform=arm64 golang:${GO_VER}-alpine as builder
 ARG GO_LDFLAGS
 ARG GO_TAGS
 
 RUN apk add --no-cache \
 	gcc \
 	git \
-	musl-dev;
+	musl-dev \
+	binutils-gold;
 
 ADD . /build/fabric-ca
 WORKDIR /build/fabric-ca
@@ -23,7 +24,7 @@ RUN go install -tags "${GO_TAGS}" -ldflags "${GO_LDFLAGS}" \
 	github.com/hyperledger/fabric-ca/cmd/fabric-ca-client
 
 
-FROM alpine:${ALPINE_VER}
+FROM --platform=arm64 alpine:${ALPINE_VER}
 RUN apk add --no-cache \
 	tzdata;
 ENV FABRIC_CA_HOME /etc/hyperledger/fabric-ca-server

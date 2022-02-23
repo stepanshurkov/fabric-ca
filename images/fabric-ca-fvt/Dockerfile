@@ -4,7 +4,7 @@
 # SPDX-License-Identifier: Apache-2.0
 #
 ARG GO_VER
-FROM golang:${GO_VER}-buster as fabric-ca-builder
+FROM --platform=arm64 golang:${GO_VER}-buster as fabric-ca-builder
 ARG GO_LDFLAGS
 ARG GO_TAGS
 
@@ -17,7 +17,7 @@ RUN go build -tags "${GO_TAGS}" -ldflags "${GO_LDFLAGS}" \
 	-o /usr/local/bin/fabric-ca-client \
 	github.com/hyperledger/fabric-ca/cmd/fabric-ca-client
 
-FROM debian:buster-20190910-slim
+FROM --platform=arm64 debian:buster-20190910-slim
 ARG PG_VER
 
 ENV PATH="/usr/local/go/bin/:${PATH}" \

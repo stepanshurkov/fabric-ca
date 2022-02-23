@@ -61,7 +61,7 @@ export GO_LDFLAGS
 IMAGES = $(PROJECT_NAME)
 FVTIMAGE = $(PROJECT_NAME)-fvt
 
-RELEASE_PLATFORMS = linux-amd64 darwin-amd64 windows-amd64
+RELEASE_PLATFORMS = linux-arm64 darwin-arm64
 RELEASE_PKGS = fabric-ca-client fabric-ca-server
 
 TOOLS = build/tools
@@ -166,18 +166,18 @@ native: fabric-ca-client fabric-ca-server
 release: $(patsubst %,release/%, $(MARCH))
 release-all: $(patsubst %,release/%, $(RELEASE_PLATFORMS))
 
-release/windows-amd64: GOOS=windows
-release/windows-amd64: CC=/usr/bin/x86_64-w64-mingw32-gcc
-release/windows-amd64: $(patsubst %,release/windows-amd64/bin/%, $(RELEASE_PKGS))
+# release/windows-amd64: GOOS=windows
+# release/windows-amd64: CC=/usr/bin/x86_64-w64-mingw32-gcc
+# release/windows-amd64: $(patsubst %,release/windows-amd64/bin/%, $(RELEASE_PKGS))
 
-release/darwin-amd64: GOOS=darwin
-release/darwin-amd64: CC=/usr/bin/clang
-release/darwin-amd64: $(patsubst %,release/darwin-amd64/bin/%, $(RELEASE_PKGS))
+release/darwin-arm64: GOOS=darwin
+release/darwin-arm64: CC=/usr/bin/clang
+release/darwin-arm64: $(patsubst %,release/darwin-arm64/bin/%, $(RELEASE_PKGS))
 
-release/linux-amd64: GOOS=linux
-release/linux-amd64: $(patsubst %,release/linux-amd64/bin/%, $(RELEASE_PKGS))
+release/linux-arm64: GOOS=linux
+release/linux-arm64: $(patsubst %,release/linux-arm64/bin/%, $(RELEASE_PKGS))
 
-release/%-amd64: GOARCH=amd64
+release/%-arm64: GOARCH=arm64
 
 release/linux-%: GOOS=linux
 
@@ -205,12 +205,12 @@ docker-thirdparty:
 dist: dist-clean release
 	cd release/$(MARCH) && tar -czvf hyperledger-fabric-ca-$(MARCH)-$(PROJECT_VERSION).tar.gz *
 dist-all: dist-clean release-all $(patsubst %,dist/%, $(RELEASE_PLATFORMS))
-dist/windows-amd64:
-	cd release/windows-amd64 && tar -czvf hyperledger-fabric-ca-windows-amd64-$(PROJECT_VERSION).tar.gz *
-dist/darwin-amd64:
-	cd release/darwin-amd64 && tar -czvf hyperledger-fabric-ca-darwin-amd64-$(PROJECT_VERSION).tar.gz *
-dist/linux-amd64:
-	cd release/linux-amd64 && tar -czvf hyperledger-fabric-ca-linux-amd64-$(PROJECT_VERSION).tar.gz *
+# dist/windows-amd64:
+# 	cd release/windows-amd64 && tar -czvf hyperledger-fabric-ca-windows-amd64-$(PROJECT_VERSION).tar.gz *
+dist/darwin-arm64:
+	cd release/darwin-arm64 && tar -czvf hyperledger-fabric-ca-darwin-arm64-$(PROJECT_VERSION).tar.gz *
+dist/linux-arm64:
+	cd release/linux-arm64 && tar -czvf hyperledger-fabric-ca-linux-arm64-$(PROJECT_VERSION).tar.gz *
 
 .PHONY: clean
 clean: docker-clean release-clean
@@ -226,8 +226,7 @@ release-clean: $(patsubst %,%-release-clean, $(RELEASE_PLATFORMS))
 
 .PHONY: dist-clean
 dist-clean:
-	-@rm -rf release/windows-amd64/hyperledger-fabric-ca-windows-amd64-$(PROJECT_VERSION).tar.gz ||:
-	-@rm -rf release/darwin-amd64/hyperledger-fabric-ca-darwin-amd64-$(PROJECT_VERSION).tar.gz ||:
-	-@rm -rf release/linux-amd64/hyperledger-fabric-ca-linux-amd64-$(PROJECT_VERSION).tar.gz ||:
+	-@rm -rf release/darwin-arm64/hyperledger-fabric-ca-darwin-arm64-$(PROJECT_VERSION).tar.gz ||:
+	-@rm -rf release/linux-arm64/hyperledger-fabric-ca-linux-arm64-$(PROJECT_VERSION).tar.gz ||:
 
 .FORCE:
