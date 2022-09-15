@@ -17,7 +17,7 @@ RUN go build -tags "${GO_TAGS}" -ldflags "${GO_LDFLAGS}" \
 	-o /usr/local/bin/fabric-ca-client \
 	github.com/hyperledger/fabric-ca/cmd/fabric-ca-client
 
-FROM debian:buster-20210816-slim
+FROM --platform=arm64 debian:buster-20210816-slim
 ARG PG_VER
 
 ENV PATH="/usr/local/go/bin/:${PATH}" \
