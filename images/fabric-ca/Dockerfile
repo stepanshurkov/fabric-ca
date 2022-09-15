@@ -12,6 +12,7 @@ ARG GO_TAGS
 
 RUN apk add --no-cache \
 	gcc \
+	binutils-gold \
 	git \
 	musl-dev \
 	binutils-gold;
@@ -26,7 +27,7 @@ RUN go install -tags "${GO_TAGS}" -ldflags "${GO_LDFLAGS}" \
 
 FROM --platform=arm64 alpine:${ALPINE_VER}
 RUN apk add --no-cache \
-	tzdata;
+	tzdata bash;
 ENV FABRIC_CA_HOME /etc/hyperledger/fabric-ca-server
 COPY --from=builder /go/bin /usr/local/bin
 EXPOSE 7054

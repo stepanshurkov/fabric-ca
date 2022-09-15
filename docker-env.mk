@@ -23,11 +23,11 @@ endif
 
 DBUILD = docker build $(DOCKER_BUILD_FLAGS)
 
-DOCKER_NS ?= stwindows
+DOCKER_NS ?= sshurkov
 DOCKER_TAG=$(ARCH)-$(PROJECT_VERSION)
 
 DOCKER_GO_LDFLAGS += $(GO_LDFLAGS)
-DOCKER_GO_LDFLAGS += -linkmode external -extldflags '-lpthread'
+DOCKER_GO_LDFLAGS += -linkmode external -extldflags '-static'
 
 #
 # What is a .dummy file?
